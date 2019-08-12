@@ -3,6 +3,8 @@ project(CarNum)
 set(CMAKE_CXX_STANDARD 14)
 
 
+set(CarNumOcr_LIBS CarNumOcr)
+set(CarNumOcr_INCLUDE_DIRS ${CMAKE_SOURCE_DIR})
 
 find_package(OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS})
