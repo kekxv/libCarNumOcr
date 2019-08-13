@@ -36,6 +36,7 @@ string CarNumOcr(Mat &ImgCarNum, pr::PlateSegmentation &plateSegmentation, CNNRe
 }
 
 vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(Mat &image) {
+    resize(image, image, Size(1024, image.rows * 1024 / image.cols));
     vector<std::pair<std::string, float>> CarNum;
     if (image.empty()) {
         return CarNum;
