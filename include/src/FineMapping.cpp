@@ -24,8 +24,8 @@ namespace pr{
     cv::Mat FineMapping::FineMappingHorizon(cv::Mat FinedVertical,int leftPadding,int rightPadding)
     {
 
-//        if(FinedVertical.channels()==1)
-//            cv::cvtColor(FinedVertical,FinedVertical,cv::COLOR_GRAY2BGR);
+        if(FinedVertical.channels()==1)
+            cv::cvtColor(FinedVertical,FinedVertical,cv::COLOR_GRAY2BGR);
         cv::Mat inputBlob = cv::dnn::blobFromImage(FinedVertical, 1/255.0, cv::Size(66,16),
                                       cv::Scalar(0,0,0),false);
 
