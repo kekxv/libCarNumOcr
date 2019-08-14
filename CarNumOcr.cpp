@@ -36,6 +36,8 @@ string CarNumOcr(Mat &ImgCarNum, pr::PlateSegmentation &plateSegmentation, CNNRe
 }
 
 vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(Mat &image) {
+    if (image.cols > 1024)
+        resize(image, image, Size(1024, image.rows * 1024 / image.cols));
     vector<std::pair<std::string, float>> CarNum;
     if (image.empty()) {
         return CarNum;
@@ -50,9 +52,12 @@ vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(Mat &image) {
         } else {
             pr = image.cols / image.rows;
         }
-        printf("%d", pr);
+        // printf("%d", pr);
         if (pr > 2 && pr < 15) {
-            std::pair<std::string, float> res = recognizr->SegmentationFreeForSinglePlate(image, pr::CH_PLATE_CODE);
+            cv::Mat ImgCarNum = pr::FineMapping::FineMappingVertical(image);
+
+            ImgCarNum = fineMapper->FineMappingHorizon(ImgCarNum, 0, 0);
+            std::pair<std::string, float> res = recognizr->SegmentationFreeForSinglePlate(ImgCarNum, pr::CH_PLATE_CODE);
             CarNum.push_back(res);
         }
     } else {
