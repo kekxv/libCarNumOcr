@@ -33,9 +33,9 @@ public:
 
     vector<std::pair<std::string, float>> GetCarNum(std::string &image);
     vector<std::pair<std::string, float>> GetCarNum(unsigned char *image,size_t imageLen);
+    vector<std::pair<std::string, float>> GetCarNum(cv::Mat *image);
 
 private:
-    vector<std::pair<std::string, float>> GetCarNum(cv::Mat &image);
 
 
     pr::PlateDetection *plateDetection = nullptr;//(modelPath + "/cascade.xml");

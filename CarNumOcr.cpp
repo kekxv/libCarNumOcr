@@ -35,26 +35,26 @@ string CarNumOcr(Mat &ImgCarNum, pr::PlateSegmentation &plateSegmentation, CNNRe
     return plate.decodePlateNormal(chars);
 }
 
-vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(Mat &image) {
-    if (image.cols > 1024)
-        resize(image, image, Size(1024, image.rows * 1024 / image.cols));
+vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(Mat *image) {
+    if (image->cols > 1024)
+        resize(*image, *image, Size(1024, image->rows * 1024 / image->cols));
     vector<std::pair<std::string, float>> CarNum;
-    if (image.empty()) {
+    if (image->empty()) {
         return CarNum;
     }
 
     std::vector<pr::PlateInfo> plates;
-    plateDetection->plateDetectionRough(image, plates);
+    plateDetection->plateDetectionRough(*image, plates);
     if (plates.empty()) {
         int pr = 0;
-        if (image.rows > image.cols) {
-            pr = image.rows / image.cols;
+        if (image->rows > image->cols) {
+            pr = image->rows / image->cols;
         } else {
-            pr = image.cols / image.rows;
+            pr = image->cols / image->rows;
         }
         // printf("%d", pr);
         if (pr > 2 && pr < 15) {
-            cv::Mat ImgCarNum = pr::FineMapping::FineMappingVertical(image);
+            cv::Mat ImgCarNum = pr::FineMapping::FineMappingVertical(*image);
 
             ImgCarNum = fineMapper->FineMappingHorizon(ImgCarNum, 0, 0);
             std::pair<std::string, float> res = recognizr->SegmentationFreeForSinglePlate(ImgCarNum, pr::CH_PLATE_CODE);
@@ -97,11 +97,11 @@ CarNumOcr::~CarNumOcr() {
 
 vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(std::string &image) {
     auto img = imread(image);
-    return GetCarNum(img);
+    return GetCarNum(&img);
 }
 
 vector<std::pair<std::string, float>> CarNumOcr::GetCarNum(unsigned char *image, size_t imageLen) {
     std::vector<unsigned char> buf(image, image + imageLen);
     auto img = imdecode(buf, cv::ImreadModes::IMREAD_ANYCOLOR);
-    return GetCarNum(img);
+    return GetCarNum(&img);
 }
