@@ -42,3 +42,18 @@ add_executable(
 
 target_link_libraries(CarNumOcr ${OpenCV_LIBS})
 target_link_libraries(CarNum CarNumOcr)
+
+
+INSTALL(TARGETS CarNumOcr CarNum
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION libstatic
+        )
+INSTALL(DIRECTORY model DESTINATION bin
+        PATTERN "model/*"
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+        GROUP_EXECUTE GROUP_READ)
+INSTALL(DIRECTORY model DESTINATION sharp/CarNumOcr
+        PATTERN "model/*"
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+        GROUP_EXECUTE GROUP_READ)
